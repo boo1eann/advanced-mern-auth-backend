@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
-import { config } from '../../config/app.config';
+import { config } from '../config/app.config';
 
-const connectDatabase = async () => {
+const connectDatabase = async (): Promise<void> => {
 	try {
 		await mongoose.connect(config.MONGO_URI);
 		console.log('Connected to Mongo database');
