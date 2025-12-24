@@ -14,7 +14,7 @@ export interface UserDocument extends Document {
 	isEmailVerified: boolean;
 	createdAt: Date;
 	updatedAt: Date;
-	UserPreference: UserPreferences;
+	userPreference: UserPreferences;
 	comparePassword(value: string): Promise<boolean>;
 }
 
@@ -29,7 +29,7 @@ const userSchema = new Schema<UserDocument>(
 		name: { type: String, required: true },
 		email: { type: String, unique: true, required: true },
 		password: { type: String, required: true },
-		UserPreference: {
+		userPreference: {
 			type: userPreferencesSchema,
 			default: {},
 		},
@@ -52,11 +52,13 @@ userSchema.methods.comparePassword = async function (value: string): Promise<boo
 
 userSchema.set('toJSON', {
 	transform: function (doc, ret) {
-		const {
-			password,
-			UserPreference: { twoFactorSecret, ...safeUserPreferences },
-			...rest
-		} = ret;
+		const { password, userPreference: up = {}, ...rest } = ret;
+
+		// говорим TypeScript, что up — это UserPreference
+		const userPreferences = up as UserPreferences;
+
+		const { twoFactorSecret, ...safeUserPreferences } = userPreferences;
+
 		return {
 			...rest,
 			userPreferences: safeUserPreferences,
