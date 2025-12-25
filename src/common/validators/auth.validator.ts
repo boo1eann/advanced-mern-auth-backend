@@ -16,7 +16,6 @@ export const registerSchema = z
 		email: emailSchema,
 		password: passwordSchema,
 		confirmPassword: passwordSchema,
-		userAgent: z.string().optional(),
 	})
 	.refine((val) => val.password === val.confirmPassword, {
 		error: 'Password does not match',
@@ -26,4 +25,5 @@ export const registerSchema = z
 export const loginSchema = z.object({
 	email: emailSchema,
 	password: passwordSchema,
+	userAgent: z.string().optional(),
 });

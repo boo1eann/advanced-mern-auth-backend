@@ -13,16 +13,15 @@ export class AuthController {
 
 	public register = asyncHandler(
 		async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-			const userAgent = req.headers['user-agent'];
 			const body = registerSchema.parse({
 				...req.body,
-				userAgent,
 			});
 
-			this.authService.register(body);
+			const { user } = await this.authService.register(body);
 
 			return res.status(HTTPSTATUS.CREATED).json({
 				message: 'User registered succesfully',
+				data: user,
 			});
 		},
 	);
