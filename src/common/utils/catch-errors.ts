@@ -15,27 +15,19 @@ export class BadRequestException extends AppError {
 }
 
 export class UnauthorizedException extends AppError {
-	constructor(message = "Unauthorized Access", errorCode?: ErrorCode) {
-		super(
-			message,
-			HTTPSTATUS.UNAUTHORIZED,
-			errorCode || ErrorCode.ACCESS_UNAUTHORIZED
-		);
+	constructor(message = 'Unauthorized Access', errorCode?: ErrorCode) {
+		super(message, HTTPSTATUS.UNAUTHORIZED, errorCode || ErrorCode.ACCESS_UNAUTHORIZED);
 	}
 }
 
 export class InternalServerException extends AppError {
-	constructor(message = "Internal Server Error", errorCode?: ErrorCode) {
-		super(
-			message,
-			HTTPSTATUS.INTERNAL_SERVER_ERROR,
-			errorCode || ErrorCode.INTERNAL_SERVER_ERROR
-		);
+	constructor(message = 'Internal Server Error', errorCode?: ErrorCode) {
+		super(message, HTTPSTATUS.INTERNAL_SERVER_ERROR, errorCode || ErrorCode.INTERNAL_SERVER_ERROR);
 	}
 }
 
 export class HttpException extends AppError {
-	constructor(message: 'Http Exception Error', statusCode: HttpStatusCode, errorCode?: ErrorCode) {
+	constructor(message = 'Http Exception Error', statusCode: HttpStatusCode, errorCode?: ErrorCode) {
 		super(message, statusCode, errorCode);
 	}
 }
