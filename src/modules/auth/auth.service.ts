@@ -18,6 +18,8 @@ import {
 	signJwtToken,
 	verifyJwtToken,
 } from '../../common/utils/jwt';
+import { sendEmail } from '../../mailers/mailer';
+import { verifyEmailTemplate } from '../../mailers/templates/template';
 
 export class AuthService {
 	public async register(registerData: RegisterDto) {
@@ -42,13 +44,18 @@ export class AuthService {
 
 		const userId = newUser._id;
 
-		const verificationCode = await VerificationCodeModel.create({
+		const verification = await VerificationCodeModel.create({
 			userId,
 			type: VerificationEnum.EMAIL_VERIFICATION,
 			expiresAt: fortyFiveMinutesFromNow(),
 		});
 
 		// Sending verification email link
+		const verificationUrl = `${config.APP_ORIGIN}/confirm-account?code=${verification.code}`;
+		await sendEmail({
+			to: newUser.email,
+			...verifyEmailTemplate(verificationUrl),
+		});
 
 		return {
 			user: newUser,
