@@ -10,11 +10,12 @@ import {
 	verificationEmailSchema,
 } from '../../common/validators/auth.validator';
 import {
+	clearAuthenticationCookies,
 	getAccessTokenCookieOptions,
 	getRefreshTokenCookieOptions,
 	setAuthenticationCookies,
 } from '../../common/utils/cookie';
-import { UnauthorizedException } from '../../common/utils/catch-errors';
+import { NotFoundExeption, UnauthorizedException } from '../../common/utils/catch-errors';
 
 export class AuthController {
 	private authService: AuthService;
@@ -102,6 +103,32 @@ export class AuthController {
 
 			return res.status(HTTPSTATUS.OK).json({
 				message: 'Password reset email sent',
+			});
+		},
+	);
+
+	public resetPassword = asyncHandler(
+		async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+			const body = resetPasswordSchema.parse(req.body);
+
+			await this.authService.resetPassword(body);
+
+			return clearAuthenticationCookies(res).status(HTTPSTATUS.OK).json({
+				message: 'Reset password successfully',
+			});
+		},
+	);
+
+	public logout = asyncHandler(
+		async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+			const sessionId = req.sessionId;
+			if (!sessionId) {
+				throw new NotFoundExeption('Session is invalid');
+			}
+			await this.authService.logout(sessionId);
+
+			return clearAuthenticationCookies(res).status(HTTPSTATUS.OK).json({
+				message: 'User logout successfully',
 			});
 		},
 	);
