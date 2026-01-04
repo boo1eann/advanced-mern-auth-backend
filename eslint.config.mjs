@@ -29,7 +29,7 @@ export default defineConfig([
 			'@typescript-eslint/ban-types': 'off',
 			'@typescript-eslint/no-unused-vars': 'off',
 			'@typescript-eslint/no-explicit-any': 'off',
-			'@typescript-eslint/explicit-function-return-type': 'warn',
+			'@typescript-eslint/explicit-function-return-type': 'off',
 			'@typescript-eslint/no-empty-object-type': 'off',
 			'prettier/prettier': [
 				'error',
