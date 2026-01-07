@@ -96,6 +96,14 @@ export class AuthService {
 		}
 
 		// Check if the user enable 2fa return user = null
+		if (user.userPreference.enable2FA) {
+			return {
+				user: null,
+				mfaRequired: true,
+				accessToken: '',
+				refreshToken: '',
+			};
+		}
 
 		const session = await SessionModel.create({
 			userId: user._id,
